@@ -46,6 +46,16 @@ class Reline::Config
   end
 
   attr_accessor :autocompletion
+  attr_accessor :dialog_render_opts
+
+  DialogRenderOpts = Struct.new(
+    :scrollbar,
+    :height,
+    :bg_color,
+    :pointer_bg_color,
+    :fg_color,
+    :pointer_fg_color,
+  )
 
   def initialize
     @additional_key_bindings = {} # from inputrc
@@ -71,6 +81,15 @@ class Reline::Config
     @test_mode = false
     @autocompletion = false
     @convert_meta = true if seven_bit_encoding?(Reline::IOGate.encoding)
+
+    @dialog_render_opts = DialogRenderOpts.new(
+      scrollbar: true,
+      height: 15,
+      bg_color: 46,
+      pointer_bg_color: 45,
+      fg_color: 37,
+      pointer_fg_color: 37
+    )
   end
 
   def reset

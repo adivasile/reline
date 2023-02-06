@@ -72,7 +72,9 @@ module Reline
     extend Forwardable
     def_delegators :config,
       :autocompletion,
-      :autocompletion=
+      :autocompletion=,
+      :dialog_render_opts,
+      :dialog_render_opts=
 
     def initialize
       self.output = STDOUT
@@ -252,14 +254,10 @@ module Reline
       end
       dialog.pointer = pointer
       DialogRenderInfo.new(
-        pos: cursor_pos_to_render,
-        contents: result,
-        scrollbar: true,
-        height: 15,
-        bg_color: 46,
-        pointer_bg_color: 45,
-        fg_color: 37,
-        pointer_fg_color: 37
+        config.dialog_render_opts.to_h.merge(
+          pos: cursor_pos_to_render,
+          contents: result,
+        )
       )
     }
     Reline::DEFAULT_DIALOG_CONTEXT = Array.new
@@ -545,6 +543,7 @@ module Reline
   def_single_delegators :core, :add_dialog_proc
   def_single_delegators :core, :dialog_proc
   def_single_delegators :core, :autocompletion, :autocompletion=
+  def_single_delegators :core, :dialog_render_opts, :dialog_render_opts=
 
   def_single_delegators :core, :readmultiline
   def_instance_delegators self, :readmultiline
